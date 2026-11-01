@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Screenshot Archaeology — traces & fragments</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <aside class="sidebar">
+      <h1>Screenshot<br />Archaeology</h1>
+      <section class="input-section">
+        <h2>Open your screenshot archive</h2>
+        <p id="modeDescription">
+          Import the JSON downloaded from the workshop analysis app.
+        </p>
+        <label class="file-button" aria-disabled="true"
+          ><span>Preparing workspace…</span
+          ><input id="import" type="file" disabled accept=".json,application/json"
+        /></label>
+      </section>
+
+      <p id="importStatus" class="small" role="status"></p>
+      <div class="dataset-meta" id="datasetMeta">No dataset open.</div>
+      <div class="save-actions">
+        <button id="export" class="secondary" disabled>Export PNG</button
+        ><button id="printCurrent" class="secondary" disabled>Print / PDF</button>
+      </div>
+    </aside>
+    <main class="workspace">
+      <header class="workspace-header">
+        <nav class="view-tabs" aria-label="Visualisation">
+          <button id="constellationTab" aria-pressed="true">Constellation</button
+          ><button id="collageTab" aria-pressed="false">Collage</button
+          ><button id="microcosmTab" aria-pressed="false" disabled>Microcosm</button>
+        </nav>
+        <span id="viewNote">Connections proposed from content</span>
+      </header>
+      <fieldset class="relation-filters" id="relationFilters">
+        <legend class="sr-only">Relationship labels · select several</legend>
+        <div id="relationChoices"></div>
+      </fieldset>
+      <div class="tools" id="graphTools">
+        <label
+          >View<select id="layout">
+            <option value="fused_umap">Image + text map</option>
+            <option value="text_umap">Text map</option>
+            <option value="image_umap">Image map</option>
+            <option value="fused_pca">PCA map</option>
+          </select></label
+        >
+        <label class="spacing-control"
+          >Spacing<input
+            id="graphSpacing"
+            type="range"
+            min="1"
+            max="2.5"
+            step=".1"
+            value="1.5"
+        /></label>
+        <button id="labels" class="secondary" aria-pressed="true">Hide labels</button
+        ><button id="resetGraph" class="secondary">Fit view</button>
+
+        <div class="relation-shortcuts">
+          <button id="allRelations" class="secondary">Show all relations</button
+          ><button id="noRelations" class="secondary">Clear relations</button>
+        </div>
+      </div>
+      <div class="tools hidden" id="collageTools">
+        <button id="arrange" class="secondary">Arrange again</button
+        ><button id="equal" class="secondary">Use equal sizes</button
+        ><button id="resetCollage" class="secondary">Reset arrangement</button>
+        <label class="bounds-control"
+          ><input id="itemBounds" type="checkbox" /> Show item rectangles</label
+        >
+        <label class="bounds-control"
+          ><input id="posterDarkMode" type="checkbox" /> Dark mode</label
+        >
+      </div>
+      <div class="tools hidden" id="microcosmTools">
+        <label
+          >Read through<select id="microcosmLens">
+            <option value="combined">Content + visual detail</option>
+            <option value="content">Specific content</option>
+            <option value="visual">Visual characteristics</option>
+          </select></label
+        >
+        <label
+          >Theme<select id="microcosmCount">
+            <option>3</option>
+            <option>4</option>
+            <option selected>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+          </select></label
+        >
+        <select id="microcosmFocus" hidden aria-hidden="true" tabindex="-1">
+          <option value="">All themes</option>
+        </select>
+        <button id="microcosmFit" class="secondary">Fit view</button>
+        <button id="microcosmPlay" class="secondary" aria-pressed="true">Pause</button>
+      </div>
+      <div class="stage" id="stage">
+        <canvas
+          id="field"
+          aria-label="Constellation. Choose a trace from the selector to inspect it."
+        ></canvas
+        ><canvas
+          id="poster"
+          class="hidden"
+          aria-label="Editable A4 collage. Choose an artifact from the selector for keyboard editing."
+        ></canvas>
+        <div id="empty" class="empty"></div>
+      </div>
+      <footer class="workspace-footer">
+        <label id="selectionLabel"
+          >Find a trace<select id="sourceList">
+            <option value="">Choose a screenshot</option>
+          </select></label
+        ><span id="count"></span>
+      </footer>
+    </main>
+    <aside class="inspector" id="inspector">
+      <p class="muted">Select a screenshot, a connection or a collage fragment.</p>
+    </aside>
+    <dialog id="sourceDialog">
+      <button id="closeSource" class="dialog-close">Close original</button>
+      <h2 id="sourceTitle">Original screenshot</h2>
+      <p id="sourceCaption" class="small"></p>
+      <div class="original-frame">
+        <img id="originalImage" alt="Original screenshot" /><svg
+          id="originalBox"
+          viewBox="0 0 1000 1000"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <rect id="cropRect" fill="none" stroke="#d4ed70" stroke-width="5" />
+        </svg>
+      </div>
+      <p id="sourceError" class="small hidden">
+        Open workspace.html inside the extracted bundle to locate the full original, or
+        choose its file below.
+      </p>
+      <label class="file-button secondary hidden" id="locateLabel"
+        >Locate original screenshot<input
+          id="locateOriginal"
+          type="file"
+          accept="image/png,image/jpeg,image/webp"
+      /></label>
+    </dialog>
+
+    <script src="lib/p5.min.js"></script>
+    <script src="src/screenshot-archaeology/bootstrap.js"></script>
+  </body>
+</html>
